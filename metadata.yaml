@@ -1,0 +1,20 @@
+# Copyright 2021 Przemysław Lal
+# See LICENSE file for licensing details.
+name: jaeger-hotrod
+description: |
+  Demo application that consists of several microservices and illustrates the use of the OpenTracing API
+summary: |
+  Demo application that and illustrates the use of the OpenTracing API.
+
+containers:
+  hotrod:
+    resource: hotrod-image
+
+requires:
+  opentracing:
+    interface: tracing-agent
+
+resources:
+  hotrod-image:
+    type: oci-image
+    description: OCI image for Jaeger hotrod example app (jaegertracing/example-hotrod)
