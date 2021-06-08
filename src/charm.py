@@ -32,7 +32,7 @@ class JaegerHotrodCharm(CharmBase):
         self.framework.observe(self.on.hotrod_pebble_ready, self._on_hotrod_pebble_ready)
         self.framework.observe(self.on.config_changed, self._on_config_changed)
 
-        self.framework.observe(self.on["opentracing"].relation_changed, self._on_opentracing_relation_changed)
+        self.framework.observe(self.on["monitoring"].relation_changed, self._on_monitoring_relation_changed)
 
         self._stored.set_default(jaeger_agent_host="127.0.0.1")
         self._stored.set_default(jaeger_agent_port="6831")
@@ -72,10 +72,10 @@ class JaegerHotrodCharm(CharmBase):
         self.unit.status = ActiveStatus()
 
 
-    def _on_opentracing_relation_changed(self, event):
+    def _on_monitoring_relation_changed(self, event):
 
         self.unit.status = MaintenanceStatus(
-            "Updating opentracing relation"
+            "Updating monitoring relation"
         )
 
         data = event.relation.data[event.unit]
@@ -83,7 +83,7 @@ class JaegerHotrodCharm(CharmBase):
         agent_host = data.get("agent-address")
         agent_port = data.get("port")
 
-        logger.debug("opentracing relation data %s", data)
+        logger.debug("monitoring relation data %s", data)
 
         self._stored.jaeger_agent_host = agent_host
         self._stored.jaeger_agent_port = agent_port

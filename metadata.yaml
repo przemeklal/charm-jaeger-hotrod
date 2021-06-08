@@ -11,8 +11,8 @@ containers:
     resource: hotrod-image
 
 requires:
-  opentracing:
-    interface: tracing-agent
+  monitoring:
+    interface: jaeger
 
 resources:
   hotrod-image:
