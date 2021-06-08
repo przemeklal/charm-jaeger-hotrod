@@ -11,8 +11,8 @@ containers:
     resource: hotrod-image
 
 requires:
-  monitoring:
-    interface: jaeger
+  jaeger:
+    interface: distributed-tracing
 
 resources:
   hotrod-image:
