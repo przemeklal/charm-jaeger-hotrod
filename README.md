@@ -25,7 +25,7 @@ Open your browser and navigate to address from juju status - in this example `ht
 jaeger-hotrod/0*      active    idle   10.1.19.185
 ```
 
-Click on any button to order you ride. You can click on the `[find trace]` link to open Jager Query UI directly.
+Click on any button to order your ride. You can click on the `[find trace]` link to open Jager Query UI directly.
 
 ## Developing
 
