@@ -1,4 +1,4 @@
-# Jaeger HotROD demo app charm
+# Jaeger HotROD Demo App Charm for Kubernetes
 
 ## Description
 
