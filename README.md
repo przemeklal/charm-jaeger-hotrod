@@ -1,13 +1,31 @@
-# charm-jaeger-hotrod
+# Jaeger HotROD demo app charm
 
 ## Description
 
-TODO: Describe your charm in a few paragraphs of Markdown
+Example charm that deploys Jaeger demo application and presents an example usage of [Jaeger charm](https://github.com/przemeklal/charm-jaeger) and Juju `jaeger` relation over `distributed-tracing` interface.
 
 ## Usage
 
-TODO: Provide high-level usage, such as required config or relations
+To build and deploy:
 
+```
+charmcraft pack
+juju deploy ./jaeger-hotrod.charm --resource hotrod-image=jaegertracing/example-hotrod:latest
+```
+
+Ensure that [Jaeger charm](https://github.com/przemeklal/charm-jaeger) is deployed.
+
+Relate with jaeger:
+```
+juju add-relation jaeger-hotrod:jaeger jaeger:jaeger
+```
+
+Open your browser and navigate to address from juju status - in this example `http://10.1.19.185:8080`:
+```
+jaeger-hotrod/0*      active    idle   10.1.19.185
+```
+
+Click on any button to order you ride. You can click on the `[find trace]` link to open Jager Query UI directly.
 
 ## Developing
 
