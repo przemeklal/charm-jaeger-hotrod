@@ -32,18 +32,23 @@ class JaegerHotrodCharm(CharmBase):
         self.framework.observe(self.on.hotrod_pebble_ready, self._on_hotrod_pebble_ready)
         self.framework.observe(self.on.config_changed, self._on_config_changed)
 
-        self.framework.observe(self.on["jaeger"].relation_changed, self._on_jaeger_relation_changed)
+        self.framework.observe(self.on["distributed-tracing"].relation_changed,
+                               self._on_jaeger_relation_changed)
 
         self._stored.set_default(jaeger_agent_host="127.0.0.1")
         self._stored.set_default(jaeger_agent_port="6831")
-        
 
     def _on_hotrod_pebble_ready(self, event):
         self._update_env_and_run()
         self.unit.status = ActiveStatus()
 
     def _update_env_and_run(self):
-        self.unit.status = MaintenanceStatus('Updating hotrod configuration and restarting, new agent endpoint is {}:{}'.format(self._stored.jaeger_agent_host, self._stored.jaeger_agent_port))
+        self.unit.status = MaintenanceStatus('Updating hotrod configuration and restarting,'
+                                             'new agent endpoint is {}:{}'
+                                             .format(self._stored.jaeger_agent_host,
+                                                     self._stored.jaeger_agent_port))
+
+        jeager_ui_address = "http://{}:16686".format(self._stored.jaeger_agent_host)
 
         pebble_layer = {
             "summary": "hotrod layer",
@@ -52,7 +57,7 @@ class JaegerHotrodCharm(CharmBase):
                 "hotrod": {
                     "override": "replace",
                     "summary": "hotrod",
-                    "command": "/go/bin/hotrod-linux all -j http://{}:16686".format(self._stored.jaeger_agent_host),
+                    "command": "/go/bin/hotrod-linux all -j {}".format(jeager_ui_address),
                     "startup": "enabled",
                     "environment": {
                         "JAEGER_AGENT_HOST": self._stored.jaeger_agent_host,
@@ -71,14 +76,13 @@ class JaegerHotrodCharm(CharmBase):
 
         self.unit.status = ActiveStatus()
 
-
     def _on_jaeger_relation_changed(self, event):
 
         self.unit.status = MaintenanceStatus(
             "Updating jaeger relation"
         )
 
-        data = event.relation.data[event.unit]
+        data = event.relation.data[event.app]
 
         agent_host = data.get("agent-address")
         agent_port = data.get("port")
@@ -91,7 +95,6 @@ class JaegerHotrodCharm(CharmBase):
         self._update_env_and_run()
 
         self.unit.status = ActiveStatus()
-
 
     def _on_config_changed(self, _):
         return
